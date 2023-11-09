@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  mongodump:
+    image: mongo:latest
+    env_file:
+      - '.env'
+    volumes:
+      - ./backup:/backup
+      - ./scripts:/scripts
+    command: sh -c 'chmod +x /scripts/mongodump.sh && /scripts/mongodump.sh'
+
+  mongorestore:
+    image: mongo:latest
+    env_file:
+      - '.env'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_RESTORE_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_RESTORE_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_RESTORE_DATABASE}
+    volumes:
+      - ./backup:/backup
+      - ./scripts:/scripts
+    depends_on:
+      - mongodump
+    command: sh -c 'chmod +x /scripts/mongorestore.sh && /scripts/mongorestore.sh'
