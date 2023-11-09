@@ -2,7 +2,7 @@ version: '3'
 
 services:
   mongodump:
-    image: mongo:latest
+    image: mongo:${MONGO_VERSION}
     env_file:
       - '.env'
     volumes:
@@ -11,16 +11,22 @@ services:
     command: sh -c 'chmod +x /scripts/*.sh && /scripts/mongodump.sh'
 
   mongorestore:
-    image: mongo:latest
+    image: mongo:${MONGO_VERSION}
     env_file:
       - '.env'
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_RESTORE_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_RESTORE_PASSWORD}
-      MONGO_INITDB_DATABASE: ${MONGO_RESTORE_DATABASE}
     volumes:
       - ./backup:/backup
       - ./scripts:/scripts
-    depends_on:
-      - mongodump
-    command: sh -c 'chmod +x /scripts/*.sh && /scripts/mongorestore.sh'
+    command: sh -c 'mongod & chmod +x /scripts/*.sh && /scripts/mongorestore.sh'
+
+  mongodb:
+    image: mongo:${MONGO_VERSION}
+    env_file:
+      - '.env'
+    volumes:
+      - ./scripts/init.js:/docker-entrypoint-initdb.d/init.js:ro
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_RESTORE_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_RESTORE_PASSWORD}
+    ports:
+      - 27018:27017
