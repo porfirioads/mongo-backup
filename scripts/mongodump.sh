@@ -29,4 +29,4 @@ for db in $databases; do
         --out /backup
 done
 
-# touch /backup/dump
+touch /backup/dump
