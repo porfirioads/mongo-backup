@@ -22,10 +22,3 @@ for db in $(ls /backup); do
             /backup
     fi
 done
-
-# for
-
-# Crea la base de datos si no existe
-# mongo --eval "db.getSiblingDB('<nombre_de_tu_base_de_datos>').runCommand({create: 'dummyCollection'})"
-
-# mongorestore --uri="$MONGO_RESTORE_URI" /backup
