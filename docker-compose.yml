@@ -23,8 +23,6 @@ services:
     image: mongo:${MONGO_VERSION}
     env_file:
       - '.env'
-    volumes:
-      - ./scripts/init.js:/docker-entrypoint-initdb.d/init.js:ro
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_RESTORE_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_RESTORE_PASSWORD}

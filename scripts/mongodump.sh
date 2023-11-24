@@ -1,3 +1,5 @@
+#!/bin/bash
+
 if [ -f /backup/dump ]; then
     rm /backup/dump
 fi
